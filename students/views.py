@@ -1,3 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-# Create your views here.
+from teachers.models import Teacher
+
+from .serializers import StudentSerializer
+
+
+class StudentList(APIView):
+    def post(self, request, teacher_pk):
+        teacher = get_object_or_404(Teacher, pk=teacher_pk)
+        serializer = StudentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(teacher=teacher)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
