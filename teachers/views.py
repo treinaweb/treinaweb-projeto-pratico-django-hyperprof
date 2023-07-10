@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -25,4 +26,12 @@ class TeacherDetail(APIView):
     def get(self, request, pk):
         teacher = get_object_or_404(Teacher, pk=pk)
         serializer = TeacherSerializer(teacher)
+        return Response(serializer.data)
+
+
+class MeView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        serializer = TeacherSerializer(request.user)
         return Response(serializer.data)
