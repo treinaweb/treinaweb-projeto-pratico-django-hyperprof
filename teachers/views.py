@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,3 +19,10 @@ class TeacherList(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class TeacherDetail(APIView):
+    def get(self, request, pk):
+        teacher = get_object_or_404(Teacher, pk=pk)
+        serializer = TeacherSerializer(teacher)
+        return Response(serializer.data)
