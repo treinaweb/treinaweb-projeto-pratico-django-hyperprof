@@ -5,10 +5,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Teacher
+from .permissions import TeacherListPermission
 from .serializers import TeacherSerializer
 
 
 class TeacherList(APIView):
+    permission_classes = (TeacherListPermission,)
+
     def get(self, request):
         q = request.query_params.get("q", "")
         teachers = Teacher.objects.filter(description__icontains=q)
@@ -20,6 +23,12 @@ class TeacherList(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def put(self, request):
+        serializer = TeacherSerializer(request.user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 class TeacherDetail(APIView):
