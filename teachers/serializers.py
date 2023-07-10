@@ -15,11 +15,18 @@ class TeacherSerializer(serializers.ModelSerializer):
         required=True, min_length=10, max_length=500, source="description"
     )
     password_confirmation = serializers.CharField(write_only=True)
-    valor_hora = serializers.DecimalField(required=True, min_value=10, max_value=500)
+    valor_hora = serializers.DecimalField(
+        required=True,
+        min_value=10,
+        max_value=500,
+        max_digits=5,
+        decimal_places=2,
+        source="hourly_price",
+    )
 
     class Meta:
         model = Teacher
-        field = (
+        fields = (
             "nome",
             "email",
             "idade",
@@ -44,7 +51,7 @@ class TeacherSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         del validated_data["password_confirmation"]
         validated_data["password"] = make_password(validated_data["password"])
-        super().create(validated_data)
+        return super().create(validated_data)
 
     def update(self, instance, validated_data):
         del validated_data["password_confirmation"]
