@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 from .models import Teacher
 from .permissions import TeacherListPermission
-from .serializers import TeacherSerializer
+from .serializers import TeacherProfileImageSerializer, TeacherSerializer
 
 
 class TeacherList(APIView):
@@ -44,3 +44,13 @@ class MeView(APIView):
     def get(self, request):
         serializer = TeacherSerializer(request.user)
         return Response(serializer.data)
+
+
+class TeacherProfileImageView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        serializer = TeacherProfileImageSerializer(request.user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "Foto de perfil atualizada com sucesso"})

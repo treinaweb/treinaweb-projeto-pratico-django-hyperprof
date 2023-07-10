@@ -1,8 +1,14 @@
+from uuid import uuid4
+
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 
 from .managers import TeacherManager
+
+
+def get_unique_filename(instance, filename):
+    return f"profile-images/{uuid4()}-{filename}"
 
 
 class Teacher(AbstractBaseUser, PermissionsMixin):
@@ -16,6 +22,7 @@ class Teacher(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    profile_image = models.ImageField(null=True, upload_to=get_unique_filename)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name"]
