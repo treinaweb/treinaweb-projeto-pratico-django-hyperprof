@@ -30,6 +30,10 @@ class TeacherList(APIView):
         serializer.save()
         return Response(serializer.data)
 
+    def delete(self, request):
+        request.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class TeacherDetail(APIView):
     def get(self, request, pk):
