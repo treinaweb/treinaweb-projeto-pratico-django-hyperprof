@@ -52,6 +52,7 @@ LOCAL_APPS = [
     "core.apps.CoreConfig",
     "teachers.apps.TeachersConfig",
     "students.apps.StudentsConfig",
+    "accounts.apps.AccountsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -143,7 +144,7 @@ AUTH_USER_MODEL = "teachers.Teacher"
 REST_FRAMEWORK = {
     "COERCE_DECIMAL_TO_STRING": False,
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthenticaton",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
 
@@ -156,4 +157,5 @@ SIMPLE_JWT = {
     ),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
+    "TOKEN_OBTAIN_SERIALIZER": "accounts.serializers.CustomTokenObtainPairSerializer",
 }
